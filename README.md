@@ -1,119 +1,88 @@
-<h1 align="center">Token</h1>
-<h2 align="center">Minimal Astro + Tailwind CSS Starter</h2>
+# Crypto CTF Notes
 
-<p align="center">
-    <img alt="hero" width="450" src="public/image.png" />
-</p>
+Một blog cá nhân tĩnh bằng Astro dành cho các ghi chép tiếng Việt về cryptography trong CTF. Giao diện dùng font terminal của template gốc, với bảng màu xanh dương, xanh da trời và đen.
 
-> [!NOTE]
->
-> `token-template` is a modern and minimalistic Astro + Tailwind CSS starter designed for developers and creators. With a sleek black-and-white terminal-inspired design, it features support for Markdown (MD), MDX, RSS feeds, sitemaps, and fully static content, making it perfect for personal portfolios and blogs.
+## Chạy ở máy cá nhân
 
-## 🌟 Features
-
-> **token-template** features intro:
-
-- **Minimalist Design** – Black-and-white terminal-inspired aesthetics with custom fonts.
-- **Astro + Tailwind CSS** – Built using Astro and styled with Tailwind CSS for easy customization.
-- **Content Support** – Write blog posts or documentation in Markdown (MD) and MDX.
-- **Static and Fast** – Fully static content optimized for performance.
-
-## 💻 Installation
-
-> [!TIP]
-> Remember to update [`src/consts.ts`](https://github.com/ArnavK-09/token-template/blob/main/src/consts.ts)
-
-###### terminal
+Yêu cầu: Node.js 22 trở lên.
 
 ```bash
-# Clone the repository
-git clone https://github.com/ArnavK-09/token-template.git my-portfolio
-cd my-portfolio
-
-# Install dependencies
 npm install
-
-# Run the development server
 npm run dev
 ```
 
-## 📷 Screenshots
+Sau đó mở địa chỉ Astro in ra trong terminal. Kiểm tra bản production bằng:
 
-> Here's a working and expected screenshot of **token-template**
+```bash
+npm run build
+npm run preview
+```
 
-| Landing Page                              |
-| ----------------------------------------- |
-| ![Demo](/public/screenshot.png) |
+## Cá nhân hóa blog
 
-| [Lighthouse Results](https://pagespeed.web.dev/analysis/https-token-template-deno-dev/o4lgrcn8pd?form_factor=desktop)                              |
-| ----------------------------------------- |
-| ![results](/public/lighthouse.png) |
+Sửa [src/consts.ts](src/consts.ts) trước:
 
+- `AUTHOR_NAME`: tên hiển thị ở footer.
+- `GITHUB_USERNAME`: username GitHub dùng cho các liên kết.
+- `SITE_TITLE`, `SITE_DESCRIPTION`, `QUOTE`: tên và mô tả của blog.
+- `TOPICS`: các thẻ chủ đề ở trang chủ.
+
+Mỗi bài viết là một file `.md` hoặc `.mdx` trong `src/content/blog/`. Ví dụ:
+
+```md
+---
+title: "Tên bài viết"
+description: "Tóm tắt ngắn để hiện trên card và metadata."
+pubDate: 2026-07-15
+tags: ["RSA", "Coppersmith"]
+draft: false
 ---
 
-## 💻 Contributing
+Nội dung bài viết ở đây.
+```
 
-> [!TIP]  
-> We welcome contributions to improve **token-template**! If you have suggestions, bug fixes, or new feature ideas, follow these steps:
+`draft: true` sẽ ẩn bài khỏi trang chủ, trang blog, RSS và file build. Khi muốn chèn component Astro vào bài viết, hãy dùng `.mdx`.
 
-1. **Fork the Repository**  
-   Click the **Fork** button at the top-right of the repo page.
+## Deploy lên GitHub Pages
 
-2. **Clone Your Fork**  
-   Clone the repo locally:
+Workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) build Astro và deploy thư mục `dist/` bằng GitHub Actions. Không cần tạo nhánh `gh-pages`.
 
-   ```bash
-   git clone https://github.com/ArnavK-09/token-template.git
-   ```
+1. Đẩy repository lên tài khoản GitHub của bạn.
+2. Vào **Settings → Pages** của repository.
+3. Ở **Build and deployment → Source**, chọn **GitHub Actions**.
+4. Push lên nhánh `main` hoặc chạy thủ công workflow **Deploy blog to GitHub Pages** trong tab **Actions**.
 
-3. **Create a Branch**  
-   Create a new branch for your changes:
+Nếu repository là `https://github.com/<username>/<repository>`, trang sẽ ở:
 
-   ```bash
-   git checkout -b your-feature-branch
-   ```
+```text
+https://<username>.github.io/<repository>/
+```
 
-4. **Make Changes**  
-   Implement your changes (bug fixes, features, etc.).
+Nếu bạn đặt tên repository là `<username>.github.io`, blog sẽ ở ngay domain gốc:
 
-5. **Commit and Push**  
-   Commit your changes and push the branch:
+```text
+https://<username>.github.io/
+```
 
-   ```bash
-   git commit -m "feat(scope): description"
-   git push origin your-feature-branch
-   ```
+`astro.config.mjs` tự nhận `GITHUB_REPOSITORY` trong Actions để đặt đúng `site` và `base`, nên link, RSS, sitemap và tài nguyên tĩnh vẫn hoạt động ở cả hai kiểu URL trên.
 
-6. **Open a Pull Request**  
-   Open a PR with a detailed description of your changes.
+### Custom domain (tùy chọn)
 
-7. **Collaborate and Merge**  
-   The maintainers will review your PR, request changes if needed, and merge it once approved.
+Trong **Settings → Secrets and variables → Actions → Variables**, thêm:
 
-## 🙋‍♂️ Issues
+```text
+SITE_URL=https://blog.example.com
+BASE_PATH=/
+```
 
-Found a bug or need help? Please create an issue on the [GitHub repository](https://github.com/ArnavK-09/token-template/issues) with a detailed description.
+Sau đó cấu hình domain đó trong **Settings → Pages**. Nếu dùng `CNAME`, tạo thêm `public/CNAME` chứa đúng domain của bạn trước khi deploy.
 
-## 👤 Author
+## Cấu trúc chính
 
-<table>
-  <tbody>
-    <tr>
-        <td align="center" valign="top" width="14.28%"><a href="https://github.com/ArnavK-09"><img src="https://github.com/ArnavK-09.png?s=100" width="130px;" alt="Arnav K"/></a><br /><a href="https://github.com/ArnavK-09"<h4><b>Arnav K</b></h3></a></td>
-    </tr>
-  </tbody>
-</table>
-
----
-
-<h2 align="center">📄 License</h2>
-
-<p align="center">
-<strong>token-template</strong> is licensed under the <code>ISC</code> License. See the <a href="https://github.com/ArnavK-09/token-template/blob/main/LICENSE">LICENSE</a> file for more details.
-</p>
-
----
-
-<p align="center">
-    <strong>🌟 If you find this project helpful, please give it a star on GitHub! 🌟</strong>
-</p>
+```text
+src/content/blog/       Bài viết Markdown và MDX
+src/components/         Hero, navbar, card bài viết, metadata
+src/pages/              Trang chủ, blog, RSS và robots.txt
+src/styles/global.css   Font và bảng màu xanh–đen
+.github/workflows/      Build và deploy GitHub Pages
+```

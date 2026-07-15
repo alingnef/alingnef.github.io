@@ -1,47 +1,61 @@
 ---
+import { formatVietnameseDate } from "@/lib/date";
+
 type Props = {
   title: string;
   slug: string;
   excerpt: string;
   date: Date;
+  tags?: string[];
 };
 
-const { title, slug, excerpt, date } = Astro.props;
+const { title, slug, excerpt, date, tags = [] } = Astro.props;
+const base = import.meta.env.BASE_URL;
 ---
 
 <div
-  class="w-full mx-auto bg-gradient-to-br relative pb-5 from-white/[0.001] to-white/[0.01] border-2 border-white rounded-lg overflow-hidden"
+  class="group relative mx-auto flex min-h-72 w-full flex-col overflow-hidden rounded-lg border border-sky-300/25 bg-gradient-to-br from-sky-300/[0.08] to-slate-950/20 shadow-[0_0_40px_rgba(14,165,233,0.06)] transition duration-300 hover:-translate-y-1 hover:border-sky-300/60"
 >
-  <div class="flex items-center justify-start px-4 py-2 bg-white/95">
+  <div
+    class="flex items-center justify-between border-b border-sky-300/15 bg-sky-300/[0.06] px-4 py-3"
+  >
     <div class="flex space-x-2">
-      <div class="w-3 h-3 rounded-full bg-black"></div>
-      <div class="w-3 h-3 rounded-full bg-black"></div>
-      <div class="w-3 h-3 rounded-full bg-black"></div>
+      <div class="h-2.5 w-2.5 rounded-full bg-sky-200"></div>
+      <div class="h-2.5 w-2.5 rounded-full bg-sky-400/70"></div>
+      <div class="h-2.5 w-2.5 rounded-full bg-blue-700"></div>
     </div>
+    <span class="text-xs text-sky-200/60">/writeup</span>
   </div>
 
-  <div class="p-6 tracking-wider">
-    <a href={`/blog/${slug}`} class="block group">
-      <h2 class="text-xl font-medium text-white mb-2">
-        <span class="ba text-white/70 mr-2">❯</span>
+  <div class="flex flex-1 flex-col p-6 tracking-wider">
+    <a href={`${base}blog/${slug}/`} class="flex h-full flex-col">
+      <h2 class="mb-3 text-xl font-medium text-sky-50">
+        <span class="mr-2 text-sky-300">❯</span>
         {title}
       </h2>
-      <p class="text-white font-medium tracking-widest text-sm mb-4">
-        [{
-          date.toLocaleDateString("en-us", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-          })
-        }]
+      <p class="mb-4 text-sm font-medium tracking-widest text-sky-200/80">
+        [{formatVietnameseDate(date)}]
       </p>
-      <p class="text-white/80 text-sm font-thin mb-4 line-clamp-1">{excerpt}</p>
+      <p class="mb-5 line-clamp-2 text-sm font-thin leading-6 text-sky-100/75">
+        {excerpt}
+      </p>
+      {
+        tags.length > 0 && (
+          <div class="mb-6 flex flex-wrap gap-2">
+            {tags.slice(0, 3).map((tag) => (
+              <span class="border border-sky-300/20 bg-sky-300/[0.08] px-2 py-1 text-xs text-sky-100/80">
+                #{tag}
+              </span>
+            ))}
+          </div>
+        )
+      }
       <p
-        class="text-white absolute bottom-4 font-medium inline-flex items-center group-hover:underline-offset-4 underline-offset-8 underline transition-all ease-in-out"
+        class="mt-auto inline-flex items-center font-medium text-sky-200 underline decoration-sky-400/40 underline-offset-8 transition-all group-hover:decoration-sky-200 group-hover:underline-offset-4"
       >
-        Read more
+        Đọc bài
         <svg
-          class="w-4 h-4 ml-2 transform group-hover:-translate-x-1 transition-transform"
+          class="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -49,7 +63,7 @@ const { title, slug, excerpt, date } = Astro.props;
         >
           <path
             stroke-linecap="round"
-            stroke-jine-join="round"
+            stroke-linejoin="round"
             stroke-width={2}
             d="M9 5l7 7-7 7"></path>
         </svg>

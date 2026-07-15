@@ -1,39 +1,72 @@
 ---
-import { Image } from "astro:assets";
-import HeroImg from "@/hero.png";
-import { QUOTE, SITE_TITLE } from "@/consts";
+import { GITHUB_USERNAME, QUOTE, SITE_TITLE } from "@/consts";
+
+const base = import.meta.env.BASE_URL;
 ---
 
-<div class="hero-bg hidden md:block h-screen hero-bg-animate absolute top-0"></div>
+<div class="hero-bg hero-bg-animate absolute top-0 hidden h-screen md:block" aria-hidden="true"></div>
 <section
-  class="h-screen !z-[20] relative w-full grid grid-cols-1 grid-rows-1 sm:grid-cols-2 md:grid-cols-2 gap-4 items-center"
+  class="relative grid min-h-[calc(100vh-5rem)] w-full grid-cols-1 items-center gap-10 px-5 py-12 md:grid-cols-2 md:px-10 lg:mx-auto lg:max-w-6xl"
   id="hero"
 >
-  <div class="grid place-items-center">
-    <div class="text-center -mt-10">
-      <h1 class="font-bold text-7xl">{`<${SITE_TITLE} />`}</h1>
-      <h2 class="text-2xl opacity-95">
-        {QUOTE}
-      </h2>
+  <div class="relative z-10 max-w-2xl">
+    <p class="mb-5 text-sm tracking-[0.2em] text-sky-300 md:text-base">
+      // CRYPTOGRAPHY · CTF · WRITE-UPS
+    </p>
+    <h1 class="text-5xl font-bold leading-[1.05] text-sky-50 sm:text-6xl md:text-7xl">
+      <span class="text-sky-300">&lt;</span>{SITE_TITLE}<span class="text-sky-300"> /&gt;</span>
+    </h1>
+    <p class="mt-7 max-w-xl text-lg leading-8 text-sky-100/80 md:text-xl">
+      {QUOTE}
+    </p>
+    <div class="mt-9 flex flex-wrap gap-3">
+      <a
+        href={`${base}blog/`}
+        class="border border-sky-300 bg-sky-300 px-5 py-3 text-slate-950 transition-colors hover:bg-slate-950 hover:text-sky-200"
+      >
+        Đọc bài viết →
+      </a>
+      <a
+        href={`https://github.com/${GITHUB_USERNAME}`}
+        target="_blank"
+        rel="noreferrer"
+        class="border border-sky-300/35 bg-slate-950/50 px-5 py-3 text-sky-100 transition-colors hover:border-sky-200 hover:bg-sky-300/10"
+      >
+        GitHub ↗
+      </a>
     </div>
   </div>
-  <div>
-    <Image
-      alt="Hero"
-      src={HeroImg}
-      class="brightness-200 w-full scale-90 invert"
-    />
+
+  <div class="relative z-10 mx-auto w-full max-w-xl">
+    <div class="overflow-hidden rounded-xl border border-sky-300/35 bg-slate-950/90 shadow-[0_0_80px_rgba(14,165,233,0.13)]">
+      <div class="flex items-center gap-2 border-b border-sky-300/20 bg-sky-300/[0.06] px-4 py-3">
+        <span class="h-2.5 w-2.5 rounded-full bg-sky-200"></span>
+        <span class="h-2.5 w-2.5 rounded-full bg-sky-400/70"></span>
+        <span class="h-2.5 w-2.5 rounded-full bg-blue-700"></span>
+        <span class="ml-2 text-xs text-sky-200/60">solver.log</span>
+      </div>
+      <div class="space-y-4 p-6 text-sm leading-7 text-sky-100/80 md:text-base">
+        <p><span class="text-sky-300">$</span> load_challenge("crypto")</p>
+        <p class="pl-4 text-sky-200/60">[+] Đọc source và xác định primitive</p>
+        <p class="pl-4 text-sky-200/60">[+] Kiểm chứng giả thuyết bằng script nhỏ</p>
+        <p class="pl-4 text-sky-200/60">[+] Tái lập lời giải trên local</p>
+        <p><span class="text-sky-300">$</span> print("flag&#123;…&#125;")<span class="ml-1 animate-pulse text-sky-300">_</span></p>
+      </div>
+    </div>
   </div>
 </section>
 
 <script is:inline>
-  const hero_bg = document.querySelector(".hero-bg-animate");
+  const heroBackground = document.querySelector(".hero-bg-animate");
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-  setInterval(() => {
-    let binaryText = "";
-    for (let i = 0; i < 1000; i++) {
-      binaryText += Math.floor(Math.random() * 2).toString();
-    }
-    hero_bg.textContent = binaryText;
-  }, 300);
+  if (heroBackground && !prefersReducedMotion.matches) {
+    window.setInterval(() => {
+      let binaryText = "";
+      for (let index = 0; index < 1000; index += 1) {
+        binaryText += Math.floor(Math.random() * 2).toString();
+      }
+      heroBackground.textContent = binaryText;
+    }, 700);
+  }
 </script>

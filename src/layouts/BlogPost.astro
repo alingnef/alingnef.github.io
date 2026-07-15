@@ -2,31 +2,41 @@
 import type { CollectionEntry } from "astro:content";
 import FormattedDate from "@/components/Date.astro";
 import Layout from "@/layouts/Layout.astro";
+import { SITE_TITLE } from "@/consts";
 
 type Props = CollectionEntry<"blog">["data"];
 
-const { title, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const heroImageURL = heroImage
+  ? heroImage.startsWith("http")
+    ? heroImage
+    : `${import.meta.env.BASE_URL}${heroImage.replace(/^\//, "")}`
+  : undefined;
 ---
 
-<Layout>
+<Layout title={`${title} | ${SITE_TITLE}`} description={description}>
   <article class="pb-10 grid place-items-center grid-cols-1">
-    <div class="w-full grid place-items-center my-10 px-10 overflow-x-hidden">
+    <div class="my-8 grid w-full place-items-center overflow-x-hidden px-6 md:my-12">
       {
-        heroImage && (
-          <img src={heroImage} alt="hero-image" class="rounded-2xl" />
+        heroImageURL && (
+          <img
+            src={heroImageURL}
+            alt={`Ảnh bìa cho bài viết ${title}`}
+            class="max-h-[32rem] rounded-xl border border-sky-300/20 object-cover"
+          />
         )
       }
     </div>
     <div
-      class="prose !max-w-[90vw] overflow-x-hidden !break-words brightness-110 prose-img:scale-90 prose-img:rounded-2xl prose-invert prose-hr:border-white prose-hr:bg-white px-4 md:px-0 md:max-w-4xl"
+      class="prose prose-invert prose-sky !max-w-[92vw] overflow-x-hidden !break-words px-2 text-sky-50/90 prose-a:text-sky-300 prose-code:text-sky-200 prose-headings:text-sky-50 prose-hr:border-sky-300/20 prose-img:rounded-xl prose-pre:border prose-pre:border-sky-300/20 prose-pre:bg-slate-900 md:max-w-4xl md:px-0"
     >
       <div>
         <div>
           <FormattedDate date={pubDate} />
           {
             updatedDate && (
-              <div class="last-updated-on">
-                Last updated on <FormattedDate date={updatedDate} />
+              <div class="mt-1 text-sm text-sky-200/60">
+                Cập nhật lần cuối: <FormattedDate date={updatedDate} />
               </div>
             )
           }

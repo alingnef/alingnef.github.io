@@ -1,42 +1,43 @@
 ---
 import { SITE_TITLE, NAV_LINKS as links } from "@/consts";
+
+const base = import.meta.env.BASE_URL;
+const pathname = Astro.url.pathname;
 ---
 
-<nav class="w-full !z-[9999] py-5 px-4 bg-black/90 backdrop-blur-sm">
+<nav class="w-full border-b border-sky-300/15 bg-slate-950/85 px-4 py-4 backdrop-blur-md">
   <div
-    class="w-full grid gap-4 md:px-5 place-items-center grid-cols-1 md:flex md:justify-between md:px-4"
+    class="mx-auto grid w-full max-w-6xl grid-cols-1 place-items-center gap-4 md:flex md:justify-between md:px-4"
   >
-    <a href="/">
+    <a href={base} aria-label="Trang chủ">
       <div
         id="logo"
-        class="pt-2 pb-1 !grid !place-items-center select-none leading-none hover:bg-black bg-white scale-110 hover:text-white text-black px-4 transition-all ease-in-out"
+        class="grid select-none place-items-center border border-sky-300/70 bg-sky-300 px-3 pb-1 pt-2 leading-none text-slate-950 transition-colors hover:bg-slate-950 hover:text-sky-200"
       >
         {SITE_TITLE}
       </div>
     </a>
-    <div class="flex flex-wrap gap-4 md:pr-5">
-      <div class="hidden md:block">/</div>
+    <div class="flex flex-wrap items-center justify-center gap-2 md:pr-5">
       {
         links.map((link) => {
-          const href =
-            link.href ?? link.title.toLowerCase().replaceAll(" ", "-");
-          const pathname = Astro.url.pathname.replace(
-            import.meta.env.BASE_URL,
-            "",
-          );
-          const subpath = pathname.match(/[^\/]+/g);
+          const href = link.external ? link.href : `${base}${link.href}`;
           const isActive =
-            href === pathname || href === "/" + (subpath?.[0] || "");
+            !link.external &&
+            link.href === "blog/" &&
+            pathname.startsWith(`${base}blog/`);
+
           return (
             <>
               <a
-                class:list={[{ "bg-white text-black": isActive }]}
-                class="hover:bg-white hover:text-black transition-all ease-in-out px-2 max-w-fit"
-                href={`/${href}`}
+                class:list={[{ "bg-sky-300 text-slate-950": isActive }]}
+                class="max-w-fit px-2 py-1 text-sm text-sky-100 transition-colors hover:bg-sky-200 hover:text-slate-950"
+                href={href}
+                target={link.external ? "_blank" : undefined}
+                rel={link.external ? "noreferrer" : undefined}
+                aria-current={isActive ? "page" : undefined}
               >
                 <div>{link.title}</div>
               </a>
-              <div class="hidden md:block">/</div>
             </>
           );
         })
@@ -44,17 +45,3 @@ import { SITE_TITLE, NAV_LINKS as links } from "@/consts";
     </div>
   </div>
 </nav>
-
-<script>
-  window.addEventListener("scroll", () => {
-    const logo = document.getElementById("logo");
-    if (!logo) return;
-    if (window.scrollY > 100) {
-      logo.className =
-        "pt-2 pb-1 !grid !place-items-center select-none leading-none hover:bg-white bg-black scale-100 hover:text-black text-white px-4 transition-all ease-in-out";
-    } else {
-      logo.className =
-        "pt-2 pb-1 !grid !place-items-center select-none leading-none hover:bg-black bg-white scale-110 hover:text-white text-black px-4 transition-all ease-in-out";
-    }
-  });
-</script>

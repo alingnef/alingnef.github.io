@@ -1,6 +1,7 @@
 ---
 import { ClientRouter } from "astro:transitions";
 import "@/styles/global.css";
+import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
 
 interface Props {
   title: string;
@@ -9,27 +10,32 @@ interface Props {
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-
 const {
   title = SITE_TITLE,
-  description = ABOUT_ME,
-  image = "/image.jpg",
+  description = SITE_DESCRIPTION,
+  image = "og-image.svg",
 } = Astro.props;
-import HeroImage from "@/hero.png";
-import { ABOUT_ME, SITE_TITLE } from "@/consts";
+
+const imageURL = image.startsWith("http")
+  ? image
+  : new URL(
+      `${import.meta.env.BASE_URL}${image.replace(/^\//, "")}`,
+      Astro.site ?? Astro.url,
+    ).href;
 ---
 
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<link rel="icon" type="image/svg+xml" href="https://emoji-route.deno.dev/svg/👩‍💻" />
+<meta name="theme-color" content="#020617" />
+<link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
 <meta name="generator" content={Astro.generator} />
-<link rel="sitemap" href="/sitemap-index.xml" />
+<link rel="sitemap" href={`${import.meta.env.BASE_URL}sitemap-index.xml`} />
 
 <!-- Font preloads -->
 <link
   rel="preload"
-  href="/fonts/VCRosdNEUE.ttf"
+  href={`${import.meta.env.BASE_URL}fonts/VCRosdNEUE.ttf`}
   as="font"
   type="font/ttf"
   crossorigin
@@ -45,17 +51,18 @@ import { ABOUT_ME, SITE_TITLE } from "@/consts";
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
-<meta property="og:url" content={Astro.url} />
+<meta property="og:locale" content="vi_VN" />
+<meta property="og:url" content={canonicalURL} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image, Astro.url)} />
+<meta property="og:image" content={imageURL} />
 
 <!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={Astro.url} />
-<meta property="twitter:title" content={title} />
-<meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={new URL(image, Astro.url)} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={canonicalURL} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageURL} />
 
 <!-- View Transitions  -->
 <ClientRouter />
