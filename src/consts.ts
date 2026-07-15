@@ -2,8 +2,8 @@ export const SITE_TITLE = "Crypto CTF Notes";
 export const SITE_DESCRIPTION =
   "Ghi chép tiếng Việt về cryptography trong CTF: RSA, ECC, lattice, số học và cách viết write-up có thể tái lập.";
 
-export const AUTHOR_NAME = "Tên của bạn";
-export const GITHUB_USERNAME = "your-github-username";
+export const AUTHOR_NAME = "aling";
+export const GITHUB_USERNAME = "alingnef";
 export const QUOTE =
   "Ghi chép cách đọc đề, dựng giả thuyết và giải những bài crypto CTF thú vị.";
 
