@@ -1,3 +1,10 @@
+---
+title: "RSA"
+description: "Vì sao RSA là thuật toán mã hóa bất đối xứng được tin dùng ngày nay."
+pubDate: 2026-08-30
+tags: ["CTF", "write-up", "workflow"]
+---
+
 # Hệ mật khóa bất đối xứng RSA
 Trong mật mã học, **RSA** là một thuật toán mật mã hóa khóa công khai. Đây là thuật toán đầu tiên phù hợp với việc tạo ra chữ ký điện tử đồng thời với việc mã hóa. Nó đánh dấu một sự tiến bộ vượt bậc của lĩnh vực mật mã học trong việc sử dụng khóa công khai. RSA đang được sử dụng phổ biến trong thương mại điện tử và được cho là đảm bảo an toàn với điều kiện độ dài khóa đủ lớn.
 
